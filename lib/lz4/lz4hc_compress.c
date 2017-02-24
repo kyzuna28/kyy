@@ -106,12 +106,14 @@ static FORCE_INLINE int LZ4HC_InsertAndFindBestMatch(
 	U16 * const chainTable = hc4->chainTable;
 	U32 * const HashTable = hc4->hashTable;
 	const BYTE * const base = hc4->base;
-#else
-	const int base = 0;
-#endif
-	int nbattempts = MAX_NB_ATTEMPTS;
-	size_t repl = 0, ml = 0;
-	u16 delta;
+	const BYTE * const dictBase = hc4->dictBase;
+	const U32 dictLimit = hc4->dictLimit;
+	const U32 lowLimit = (hc4->lowLimit + 64 * KB > (U32)(ip - base))
+		? hc4->lowLimit
+		: (U32)(ip - base) - (64 * KB - 1);
+	U32 matchIndex;
+	int nbAttempts = maxNbAttempts;
+	size_t ml = 0;
 
 	/* HC4 match finder */
 	LZ4HC_Insert(hc4, ip);
@@ -568,7 +570,7 @@ _Search3:
 			*op++ = (BYTE) lastRun;
 		} else
 			*op++ = (BYTE)(lastRun<<ML_BITS);
-		LZ4_memcpy(op, anchor, iend - anchor);
+		memcpy(op, anchor, iend - anchor);
 		op += iend - anchor;
 	}
 
@@ -661,6 +663,7 @@ static void LZ4HC_setExternalDict(
 	/* match referencing will resume from there */
 	ctxPtr->nextToUpdate = ctxPtr->dictLimit;
 }
+EXPORT_SYMBOL(LZ4HC_setExternalDict);
 
 static int LZ4_compressHC_continue_generic(
 	LZ4_streamHC_t *LZ4_streamHCPtr,
