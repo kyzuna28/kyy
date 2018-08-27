@@ -851,7 +851,7 @@ static ssize_t measured_fps_show(struct device *device,
 	fps_int = (unsigned int) sde_crtc->fps_info.measured_fps;
 	fps_decimal = do_div(fps_int, 10);
 	return scnprintf(buf, PAGE_SIZE,
-		"fps: %d.%d duration:%d frame_count:%llu", fps_int, fps_decimal,
+		"fps: %d.%d duration:%d frame_count:%d", fps_int, fps_decimal,
 			sde_crtc->fps_info.fps_periodic_duration, frame_count);
 }
 
@@ -914,13 +914,11 @@ static ssize_t early_wakeup_store(struct device *device,
 }
 
 static DEVICE_ATTR_RO(vsync_event);
-static DEVICE_ATTR_WO(early_wakeup);
 static DEVICE_ATTR(measured_fps, 0444, measured_fps_show, NULL);
 static DEVICE_ATTR(fps_periodicity_ms, 0644, fps_periodicity_show,
 							set_fps_periodicity);
 static struct attribute *sde_crtc_dev_attrs[] = {
 	&dev_attr_vsync_event.attr,
-	&dev_attr_early_wakeup.attr,
 	&dev_attr_measured_fps.attr,
 	&dev_attr_fps_periodicity_ms.attr,
 	NULL
