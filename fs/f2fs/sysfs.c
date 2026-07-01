@@ -19,6 +19,7 @@ static struct proc_dir_entry *f2fs_proc_root;
 
 /* Sysfs support for f2fs */
 enum {
+	GC_THREAD,	/* struct f2fs_gc_thread */
 	SM_INFO,	/* struct f2fs_sm_info */
 	DCC_INFO,	/* struct discard_cmd_control */
 	NM_INFO,	/* struct f2fs_nm_info */
