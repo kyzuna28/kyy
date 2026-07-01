@@ -66,9 +66,12 @@ static void lz4_exit(struct crypto_tfm *tfm)
 static int __lz4_compress_crypto(const u8 *src, unsigned int slen,
 				 u8 *dst, unsigned int *dlen, void *ctx)
 {
-	struct lz4_ctx *ctx = crypto_tfm_ctx(tfm);
+	/* * FIX: Hapus deklarasi ulang 'ctx' dan 'tfm' yang bikin error.
+	 * Parameter 'void *ctx' dari luar sudah langsung di-pass 
+	 * ke LZ4_compress_default sebagai workspace memory.
+	 */
 	int out_len = LZ4_compress_default(src, dst,
-		slen, *dlen, ctx->lz4_comp_mem);
+		slen, *dlen, ctx);
 
 	if (!out_len)
 		return -EINVAL;

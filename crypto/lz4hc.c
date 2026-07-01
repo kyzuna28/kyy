@@ -65,8 +65,11 @@ static void lz4hc_exit(struct crypto_tfm *tfm)
 static int __lz4hc_compress_crypto(const u8 *src, unsigned int slen,
 				   u8 *dst, unsigned int *dlen, void *ctx)
 {
+	/* FIX: Langsung gunakan parameter 'ctx' sebagai workspace memory, 
+	 * tidak perlu memanggil ->lz4hc_comp_mem karena ctx bertipe void *
+	 */
 	int out_len = LZ4_compress_HC(src, dst, slen,
-		*dlen, LZ4HC_DEFAULT_CLEVEL, ctx->lz4hc_comp_mem);
+		*dlen, LZ4HC_DEFAULT_CLEVEL, ctx);
 
 	if (!out_len)
 		return -EINVAL;
