@@ -665,7 +665,7 @@ config TCP_CONG_BBR
 	control, and can operate with shallow buffers, deep buffers,
 	bufferbloat, policers, or AQM schemes that do not provide a delay
 	signal. It requires the fq ("Fair Queue") pacing packet scheduler.
-
+	
 config TCP_CONG_BBRPLUS
         bool "BBRPLUS TCP"
         default y
@@ -674,7 +674,15 @@ config TCP_CONG_BBRPLUS
         BBRplus is an enhanced version of BBR (Bottleneck Bandwidth and RTT).
         Originally introduced by dog250 & cx9208.
         Same as BBR, it requires the fq ("Fair Queue") pacing packet scheduler.
+        
+config TCP_CONG_LOTSPEED
+	tristate "Lotspeed"
+	default n
+	---help---
 
+	Lotspeed is a Linux acceleration module designed to boost the TCP
+	response speed of devices.
+	
 choice
 	prompt "Default TCP congestion control"
 	default DEFAULT_BBRPLUS
